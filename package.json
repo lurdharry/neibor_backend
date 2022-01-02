@@ -1,0 +1,46 @@
+{
+  "name": "citizensbackend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "client": "node socket-client.js",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onipetheoderic/citizensbackend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/onipetheoderic/citizensbackend/issues"
+  },
+  "homepage": "https://github.com/onipetheoderic/citizensbackend#readme",
+  "dependencies": {
+    "chai": "^4.3.0",
+    "cors": "^2.8.5",
+    "currency-symbol-map": "^5.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "geodist": "^0.2.1",
+    "geolib": "^3.3.1",
+    "js-sha256": "^0.9.0",
+    "jwt-then": "^1.0.1",
+    "mongoose": "^5.10.15",
+    "request": "^2.88.2",
+    "socket.io": "^4.0.0",
+    "socket.io-client": "^4.0.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "mocha": "^8.3.0",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
+  }
+}

@@ -1,0 +1,100 @@
+###
+POST  http://localhost:8000/requisition/initialize_currency_requisition
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNzVhNmMwNTEzMDMzMzRhOGMzYzgwNSIsImlhdCI6MTYxODMyMzEzNn0.SP_NYusUNQqnNB7P7ZZc8kizK6JoWmjmG7OjnwOqv1g
+
+{
+    "currency": "GBP to NGN",
+    "latitude": 9.1099, 
+    "longitude": 7.4042,
+    "amount":10000
+    
+}
+
+
+
+
+
+###
+POST  http://localhost:8000/user/register
+Content-Type: application/json
+
+{
+    "name": "kemi bolaji",
+    "email": "kem7wi8@gmail.com",
+    "phone": "09042008880",
+    "password": "123455",
+    "merchant": "yes"
+}
+
+###
+GET http://localhost:8000/user/get_user_currency_pairs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNmRhYjg3YmJjMzUyMjFkNDgyYjBlOSIsImlhdCI6MTYxNzgwMDA3MX0.xGpnqecfIfdvosFIAP7my7HyTKPIQLrqef0ZsTzSXkA
+
+###
+POST  http://localhost:8000/user/create_currency_pair
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNmRhYjg3YmJjMzUyMjFkNDgyYjBlOSIsImlhdCI6MTYxNzgwMDA3MX0.xGpnqecfIfdvosFIAP7my7HyTKPIQLrqef0ZsTzSXkA
+
+{   
+    "currencyPair": "NGN to USD",
+    "rateTo": "348"
+}
+
+
+###
+POST  http://localhost:8000/user/remove_currency_pair
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNmRhYjg3YmJjMzUyMjFkNDgyYjBlOSIsImlhdCI6MTYxNzgwMDA3MX0.xGpnqecfIfdvosFIAP7my7HyTKPIQLrqef0ZsTzSXkA
+
+{   
+    "currencyPair": "NGN to USD",
+    "rateTo": "348"
+}
+
+###
+POST  http://localhost:8000/user/login
+Content-Type: application/json
+
+{   
+    "email": "onipetheoderic@gmail.com",
+    "password": "123455"
+}
+
+
+
+###
+POST  http://localhost:8000/user/update_user
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNmQ0MjhkYzk1YThkNDMzYzJjMDRjNSIsImlhdCI6MTYxNzc3MzE5N30.wghu0BEKxFb3235K_ryXqGGYD4A4C9N-DGBHitRtCBg
+
+{   
+   "howMuchBudget":5000,
+   "location": {
+       "latitude":"9.090",
+       "longitude":"7.09"
+   }
+
+}
+
+
+###
+POST  http://localhost:8000/requisition/create_requisition
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNTgyN2Y4OWUxMDUyMGZlMGVkNmFkZiIsImlhdCI6MTYxNjM5NDczMH0.66SokkWhiiuuTW_1Xua5mkLODOCelMaCAwLaCpEgn_4
+
+{   
+   "merchantId":"605824f062a6b049a4c9fb40",
+   "amount":5000
+}
+
+###
+GET http://localhost:8000/user/users/?limit=9&skip=0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNTgyN2Y4OWUxMDUyMGZlMGVkNmFkZiIsImlhdCI6MTYxNjM5NDczMH0.66SokkWhiiuuTW_1Xua5mkLODOCelMaCAwLaCpEgn_4
+
+###
+GET http://localhost:8000/user/merchants/?limit=9&skip=0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNTgyN2Y4OWUxMDUyMGZlMGVkNmFkZiIsImlhdCI6MTYxNjM5NDczMH0.66SokkWhiiuuTW_1Xua5mkLODOCelMaCAwLaCpEgn_4
