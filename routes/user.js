@@ -13,7 +13,7 @@ router.post(
 );
 
 router.get("/view_all_vendors", catchErrors(userController.view_all_vendors));
-
+router.get("/testing",userController.testing)
 router.post("/login", content_type, userController.login);
 router.post("/update_user", auth, catchErrors(userController.updateUserDetail));
 

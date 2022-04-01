@@ -125,3 +125,7 @@ exports.allUsers = async (req, res) => {
     res.status(401).json({ success: false, error });
   }
 };
+
+exports.testing = async (req,res) =>{
+  res.render('testing',{layout: 'layout/main'})
+}
