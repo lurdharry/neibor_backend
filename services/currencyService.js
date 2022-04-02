@@ -3,6 +3,8 @@ const UserCurrency = require("../models/UserCurrency");
 const Rating = require("../models/Rating");
 const Requisition = require("../models/Requisition");
 const Comment = require("../models/Comment");
+const fieldIsEmpty = require("../utils/fieldIsEmpty");
+const allCurrencies = require("../utils/allCurrencies");
 
 function CurrencyService() {}
 
@@ -16,23 +18,20 @@ CurrencyService.prototype.getUserCurrency = async function (user) {
 /*
 A service to delete currency pair
 */
-CurrencyService.prototype.removeUserCurrency = async function (
+CurrencyService.prototype.removeUserCurrency = async function ({
   user,
-  currencyData
-) {
-  const { currencyPair, rateTo } = currencyData;
-
+  currencyPairId,
+}) {
   let existingCurrency = await UserCurrency.findOne({
-    user: user,
-    currencyPair: currencyPair,
+    userId: user,
+    _id: currencyPairId,
   });
   if (existingCurrency) {
-    //if it exists we remove it
     let deleted = await UserCurrency.findByIdAndDelete(existingCurrency._id);
-
     let allCurrencies = await UserCurrency.find({ user: user });
-    //return an array of all currencies
     return allCurrencies;
+  } else {
+    throw "currency pair does not exist in your list of currency";
   }
 };
 
@@ -42,11 +41,24 @@ CurrencyService.prototype.createUserCurrency = async function (
   user,
   currencyData
 ) {
-  const { currencyPair, rateTo } = currencyData;
+  const { currencyFrom, rateTo, currencyTo, rateFrom } = currencyData;
+  fieldIsEmpty({ field: currencyFrom, name: "currency from" });
+  fieldIsEmpty({ field: currencyTo, name: "currency to" });
+  fieldIsEmpty({ field: rateFrom, name: "rate from" });
+  fieldIsEmpty({ field: rateTo, name: "rate to" });
+  //lets check if the currencyFrom and currencyTo Exists in our system
+  if (!allCurrencies.includes(currencyFrom)) {
+    throw "currencyFrom not valid";
+  }
+
+  if (!allCurrencies.includes(currencyTo)) {
+    throw "currencyTo not valid";
+  }
 
   let existingCurrency = await UserCurrency.findOne({
     user: user,
-    currencyPair: currencyPair,
+    currencyFrom: currencyFrom,
+    currencyTo: currencyTo,
   });
   if (existingCurrency) {
     console.log("EXist");
@@ -57,7 +69,7 @@ CurrencyService.prototype.createUserCurrency = async function (
       setDefaultsOnInsert: true,
       omitUndefined: true,
     };
-    update = { ...currencyData, user };
+    update = { ...currencyData, user, userId: user };
     let savedUserCurrency = await UserCurrency.findOneAndUpdate(
       { _id: existingCurrency._id },
       update,
@@ -71,9 +83,12 @@ CurrencyService.prototype.createUserCurrency = async function (
     console.log("New");
     //its not available, so we create a new one for the user
     const userCurrency = new UserCurrency({
-      currencyPair,
+      currencyFrom,
       rateTo,
+      currencyTo,
+      rateFrom,
       user,
+      userId: user,
     });
 
     let savedUserCurrency = await userCurrency.save();
@@ -84,4 +99,8 @@ CurrencyService.prototype.createUserCurrency = async function (
   }
 };
 
+CurrencyService.prototype.createUserCurrency = async function (
+  user,
+  currencyData
+) {};
 module.exports = CurrencyService;

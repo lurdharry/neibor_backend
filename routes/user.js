@@ -23,8 +23,8 @@ router.post(
   catchErrors(currencyController.create_currency_pair)
 );
 
-router.post(
-  "/remove_currency_pair",
+router.get(
+  "/remove_currency_pair/:id",
   auth,
   catchErrors(currencyController.remove_currency_pair)
 );
