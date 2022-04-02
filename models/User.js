@@ -34,23 +34,17 @@ const userSchema = new mongoose.Schema(
     },
     location: {
       type: String,
-      required: "location is required",
     },
     latitude: {
       type: String,
-      required: "latitude is required",
     },
     longitude: {
       type: String,
-      required: "longitude is required",
     },
-    type: {
-      type: String,
-      required: "type is required",
-    },
+    isAgent: Boolean,
+    isUser: Boolean,
     vendorPackages: {
       type: Array,
-      required: true,
     },
     currencyPairs: Array,
   },
