@@ -7,9 +7,7 @@ exports.register = async (req, res) => {
   try {
     let user = await userService.registerUser(userData);
     console.log(user, "UUU");
-    res
-      .status(200)
-      .json({ success: true, user, message: "Registration successful" });
+    res.redirect('/')
   } catch (error) {
     console.log(error, "yyy");
     res.status(400).json({ success: false, error });
@@ -125,3 +123,4 @@ exports.allUsers = async (req, res) => {
     res.status(401).json({ success: false, error });
   }
 };
+

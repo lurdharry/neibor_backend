@@ -5,7 +5,8 @@ let userController = require("../controllers/user");
 let currencyController = require("../controllers/currency");
 const { catchErrors } = require("../handlers/errorHandler");
 
-router.post("/register", content_type, userController.register);
+router.post("/register",userController.register);
+
 
 router.post(
   "/vendor_registration",
