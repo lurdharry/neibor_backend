@@ -40,4 +40,27 @@ router.get(
 router.get("/merchants", auth, catchErrors(userController.allMerchant));
 router.get("/users", auth, catchErrors(userController.allUsers));
 
+router.get(
+  "/get_all_currencies",
+  auth,
+  catchErrors(currencyController.get_all_currencies)
+);
+
+router.get(
+  "/get_all_merchants_with_currency",
+  auth,
+  catchErrors(currencyController.get_all_merchants_with_currency)
+);
+
+router.post(
+  "/filter_currency_by_merchant_price",
+  auth,
+  catchErrors(currencyController.filter_currency_by_merchant_price)
+);
+router.post(
+  "/filter_currency_by_merchant_distance",
+  auth,
+  catchErrors(currencyController.filter_currency_by_merchant_distance)
+);
+
 module.exports = router;

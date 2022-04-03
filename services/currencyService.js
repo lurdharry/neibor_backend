@@ -5,19 +5,98 @@ const Requisition = require("../models/Requisition");
 const Comment = require("../models/Comment");
 const fieldIsEmpty = require("../utils/fieldIsEmpty");
 const allCurrencies = require("../utils/allCurrencies");
+const fullCurrencyName = require("../utils/fullCurrencyName");
+
+var geodist = require("geodist");
 
 function CurrencyService() {}
 
-/* A service to get user currency*/
+CurrencyService.prototype.filterMerchantsByUserRatings = async function (
+  user
+) {};
+
+CurrencyService.prototype.pairWithMerchantAndNotifyMerchant = async function ({
+  user,
+  merchant,
+}) {
+  //here we create a requisition
+};
+
+CurrencyService.prototype.finishTransactionAndSaveCommentAndRating =
+  async function (user) {};
+
+CurrencyService.prototype.viewCurrencyHistory = async function ({
+  user,
+  currency,
+}) {
+  fieldIsEmpty({ field: currency, name: "currency" });
+};
+
+CurrencyService.prototype.getAllCurrencies = async function (user) {
+  return fullCurrencyName;
+};
+
 CurrencyService.prototype.getUserCurrency = async function (user) {
-  console.log(user, "the service");
   let userCurrencies = await UserCurrency.find({ user: user });
   return userCurrencies;
 };
 
-/*
-A service to delete currency pair
-*/
+CurrencyService.prototype.getMerchantCurrencyByDistance = async function ({
+  user,
+  currencyFrom,
+  currencyTo,
+  latitude,
+  longitude,
+  limit,
+  skip,
+}) {
+  fieldIsEmpty({ field: currencyFrom, name: "currency from" });
+  fieldIsEmpty({ field: currencyTo, name: "currency to" });
+  fieldIsEmpty({ field: latitude, name: "latitude" });
+  fieldIsEmpty({ field: longitude, name: "longitude" });
+  let userCurrencies = await UserCurrency.find({
+    currencyFrom,
+    currencyTo,
+  })
+    .populate({
+      path: "user",
+      model: "User",
+      select: "-password -vendorPackages -currencyPairs",
+    })
+    .skip(skip || 0) // Always apply 'skip' before 'limit'
+    .limit(limit || 5);
+
+  let selectedCurrencies = [];
+
+  for (var i = 0; i < userCurrencies.length; i++) {
+    var currentUser = { lat: latitude, lon: longitude };
+    if (!!userCurrencies[i].user.latitude) {
+      var currencies = {
+        lat: userCurrencies[i].user.latitude,
+        lon: userCurrencies[i].user.longitude,
+      };
+
+      let distance = geodist(currentUser, currencies, {
+        exact: true,
+        unit: "km",
+      });
+
+      let newFormat = userCurrencies[i];
+      let newObj = {
+        currency: newFormat,
+        distance: distance,
+      };
+
+      selectedCurrencies.push(newObj);
+    }
+  }
+
+  let sortedDist = selectedCurrencies.sort(
+    (a, b) => parseFloat(a.distance) - parseFloat(b.distance)
+  );
+  return sortedDist;
+};
+
 CurrencyService.prototype.removeUserCurrency = async function ({
   user,
   currencyPairId,
@@ -36,6 +115,29 @@ CurrencyService.prototype.removeUserCurrency = async function ({
 };
 
 /* A service to create a User currency pair*/
+CurrencyService.prototype.getUserCurrency = async function (user) {
+  let userCurrencies = await UserCurrency.find({ user: user });
+  return userCurrencies;
+};
+
+/*
+}).populate({
+    path: 'owner',
+    model: 'User',
+    select: '-password',
+    populate: { path: 'profile', model: 'Profile' },
+  });
+*/
+
+CurrencyService.prototype.getAllMerchantsWithCurrency = async function (user) {
+  let userCurrencies = await UserCurrency.find().populate({
+    path: "user",
+    model: "User",
+    select: "-password -vendorPackages -currencyPairs",
+  });
+  console.log(userCurrencies, "the user currencies");
+  return userCurrencies;
+};
 
 CurrencyService.prototype.createUserCurrency = async function (
   user,
@@ -56,13 +158,11 @@ CurrencyService.prototype.createUserCurrency = async function (
   }
 
   let existingCurrency = await UserCurrency.findOne({
-    user: user,
+    user,
     currencyFrom: currencyFrom,
     currencyTo: currencyTo,
   });
   if (existingCurrency) {
-    console.log("EXist");
-    //its existing already, so we do the update
     let options = {
       upsert: true,
       new: true,
@@ -76,12 +176,12 @@ CurrencyService.prototype.createUserCurrency = async function (
       options
     );
 
-    let allCurrencies = await UserCurrency.find({ user: user });
+    let allCurrencies = await UserCurrency.find({ user: user }).select(
+      "-userId -createdAt -updatedAt"
+    );
     //return an array of all currencies
     return allCurrencies;
   } else {
-    console.log("New");
-    //its not available, so we create a new one for the user
     const userCurrency = new UserCurrency({
       currencyFrom,
       rateTo,
@@ -93,14 +193,12 @@ CurrencyService.prototype.createUserCurrency = async function (
 
     let savedUserCurrency = await userCurrency.save();
 
-    let allCurrencies = await UserCurrency.find({ user: user });
+    let allCurrencies = await UserCurrency.find({ user: user }).select(
+      "-userId -createdAt -updatedAt"
+    );
     //return an array of all currencies
     return allCurrencies;
   }
 };
 
-CurrencyService.prototype.createUserCurrency = async function (
-  user,
-  currencyData
-) {};
 module.exports = CurrencyService;
