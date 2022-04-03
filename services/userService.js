@@ -166,8 +166,12 @@ UserService.prototype.loginUser = async function (userData) {
   const token = await jwt.sign({ id: _id }, process.env.SECRET);
   let userObj = new Object();
   userObj.token = token;
-  userObj.name = name;
-  userObj.referralId = referralId;
+  userObj.firstName = savedUser.firstName;
+  userObj.lastName = savedUser.lastName;
+  userObj.phoneNumber = savedUser.phoneNumber;
+  userObj.referralId = savedUser.referralId;
+  userObj.isAgent = savedUser.isAgent;
+  userObj.isUser = savedUser.isUser;
   return userObj;
 };
 
@@ -188,11 +192,12 @@ UserService.prototype.updateDeviseToken = async function (user_id, details) {
     options
   );
   let userObj = new Object();
-  userObj.name = savedUser.name;
-  userObj.howMuchBudget = savedUser.howMuchBudget;
-  userObj.location = savedUser.location;
+  userObj.firstName = savedUser.firstName;
+  userObj.lastName = savedUser.lastName;
+  userObj.phoneNumber = savedUser.phoneNumber;
   userObj.referralId = savedUser.referralId;
-  userObj.deviseToken = savedUser.deviseToken;
+  userObj.isAgent = savedUser.isAgent;
+  userObj.isUser = savedUser.isUser;
   return userObj;
 };
 
@@ -207,16 +212,22 @@ UserService.prototype.updateMerchantProfile = async function (
     omitUndefined: true,
   };
   update = { ...details, user: user_id };
-  let savedUser = await MerchantProfile.findOneAndUpdate(
-    { user: user_id },
+  let savedUser = await User.findOneAndUpdate(
+    { _id: user_id },
     update,
     options
   );
+  console.log(savedUser, "the saved users");
   let userObj = new Object();
-  userObj.name = savedUser.name;
-  userObj.howMuchBudget = savedUser.howMuchBudget;
+  userObj.firstName = savedUser.firstName;
+  userObj.lastName = savedUser.lastName;
+  userObj.latitude = savedUser.latitude;
+  userObj.longitude = savedUser.longitude;
   userObj.location = savedUser.location;
+  userObj.phoneNumber = savedUser.phoneNumber;
   userObj.referralId = savedUser.referralId;
+  userObj.isAgent = savedUser.isAgent;
+  userObj.isUser = savedUser.isUser;
   return userObj;
 };
 
@@ -230,11 +241,14 @@ UserService.prototype.updateUser = async function (_id, userData) {
   };
   update = { ...userData };
   let savedUser = await User.findOneAndUpdate({ _id: _id }, update, options);
+  console.log(savedUser, "the saved user");
   let userObj = new Object();
-  userObj.name = savedUser.name;
-  userObj.howMuchBudget = savedUser.howMuchBudget;
-  userObj.location = savedUser.location;
+  userObj.firstName = savedUser.firstName;
+  userObj.lastName = savedUser.lastName;
+  userObj.phoneNumber = savedUser.phoneNumber;
   userObj.referralId = savedUser.referralId;
+  userObj.isAgent = savedUser.isAgent;
+  userObj.isUser = savedUser.isUser;
   return userObj;
 };
 
