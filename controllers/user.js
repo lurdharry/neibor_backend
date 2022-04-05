@@ -10,7 +10,7 @@ exports.register = async (req, res) => {
     res.redirect('/')
   } catch (error) {
     console.log(error, "yyy");
-    res.status(400).json({ success: false, error });
+    res.send('error registering a user')
   }
 };
 //vendor_registration
