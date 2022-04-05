@@ -6,25 +6,30 @@ const requisitionSchema = new mongoose.Schema(
       type: Number,
       required: "Amount is required!",
     },
-    clientCompleted: {
+    currencyFrom: {
+      type: String,
+      required: "currencyFrom is required",
+    },
+    currencyTo: {
+      type: String,
+      required: "currencyTo is required",
+    },
+    merchantAccept: {
       type: Boolean,
       default: false,
     },
-    merchantCompleted: {
+    completed: {
       type: Boolean,
       default: false,
     },
-    location: {
-      type: Object,
-      default: { latitude: "", longitude: "" },
-    },
-    merchant: [
+    merchantId: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
       },
     ],
+    merchant: { type: String, required: true },
     user: [
       {
         type: mongoose.Schema.Types.ObjectId,
